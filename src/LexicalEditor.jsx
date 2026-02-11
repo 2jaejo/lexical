@@ -5,6 +5,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin'
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { $getRoot } from 'lexical'
+import { $generateHtmlFromNodes } from '@lexical/html'
 import { HeadingNode } from '@lexical/rich-text'
 import { ListItemNode, ListNode } from '@lexical/list'
 import Toolbar from './LexicalToolbar'
@@ -36,15 +37,23 @@ const initialConfig = {
   },
 }
 
-export default function LexicalEditor() {
+export default function LexicalEditor({ onContentChange }) {
   // 에디터 내용이 변경될 때마다 호출되는 콜백
-  const onChange = (editorState) => {
+  const onChange = (editorState, editor) => {
     // 읽기 전용 트랜잭션에서 에디터 상태를 안전하게 조회
+    let nextText = ''
+    let nextHtml = ''
     editorState.read(() => {
       const root = $getRoot()
-      // 현재 문서의 텍스트 내용 출력 (디버깅 용도)
-      console.log(root.getTextContent())
+      // 현재 문서의 텍스트 내용
+      nextText = root.getTextContent()
+      // 현재 문서를 HTML로 변환 (서식/리스트/스타일 포함)
+      nextHtml = $generateHtmlFromNodes(editor)
     })
+    // 상위 컴포넌트에 텍스트 내용 전달
+    if (typeof onContentChange === 'function') {
+      onContentChange({ text: nextText, html: nextHtml })
+    }
   }
 
   return (

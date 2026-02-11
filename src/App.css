@@ -21,3 +21,58 @@
   color: #6b7280;
   text-align: left;
 }
+
+.viewer {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.viewer-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.viewer-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.viewer-hint {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.viewer-content {
+  min-height: 120px;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #111827;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.viewer-html :where(p) {
+  margin: 0 0 0.75rem;
+}
+
+.viewer-html :where(ul, ol) {
+  padding-left: 1.25rem;
+  margin: 0 0 0.75rem;
+}
+
+.viewer-html :where(li) {
+  margin: 0.2rem 0;
+}
+
+.viewer-empty {
+  color: #94a3b8;
+}
