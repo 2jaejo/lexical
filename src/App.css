@@ -1,27 +1,32 @@
+/* 전체 레이아웃 최대 폭/여백 */
 #root {
   max-width: 960px;
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
 }
 
+/* 앱 메인 컨테이너 */
 .app-shell {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+/* 페이지 타이틀 */
 .app-title {
   font-size: 2.25rem;
   margin: 0;
   text-align: left;
 }
 
+/* 페이지 부제목 */
 .app-subtitle {
   margin: 0;
   color: #6b7280;
   text-align: left;
 }
 
+/* 미리보기 카드 컨테이너 */
 .viewer {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -33,23 +38,27 @@
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
+/* 미리보기 헤더(제목/설명) */
 .viewer-header {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
+/* 미리보기 제목 */
 .viewer-title {
   margin: 0;
   font-size: 1.25rem;
   color: #0f172a;
 }
 
+/* 미리보기 설명 */
 .viewer-hint {
   font-size: 0.85rem;
   color: #6b7280;
 }
 
+/* 미리보기 콘텐츠 영역 */
 .viewer-content {
   min-height: 120px;
   padding: 0.9rem 1rem;
@@ -60,19 +69,23 @@
   white-space: pre-wrap;
 }
 
+/* HTML 렌더링된 본문 단락 간격 */
 .viewer-html :where(p) {
   margin: 0 0 0.75rem;
 }
 
+/* 리스트 들여쓰기/간격 */
 .viewer-html :where(ul, ol) {
   padding-left: 1.25rem;
   margin: 0 0 0.75rem;
 }
 
+/* 리스트 아이템 간격 */
 .viewer-html :where(li) {
   margin: 0.2rem 0;
 }
 
+/* 빈 상태 안내 문구 */
 .viewer-empty {
   color: #94a3b8;
 }
