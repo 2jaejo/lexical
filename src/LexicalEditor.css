@@ -1,3 +1,4 @@
+/* 에디터 전체를 감싸는 카드형 컨테이너 */
 .editor-shell {
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -6,6 +7,7 @@
   overflow: hidden;
 }
 
+/* 툴바 영역 */
 .toolbar {
   display: flex;
   align-items: center;
@@ -16,6 +18,7 @@
   background: #f8fafc;
 }
 
+/* 기본 버튼 스타일 */
 .toolbar button {
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -28,34 +31,40 @@
   transition: all 0.2s ease;
 }
 
+/* 마우스 오버(비활성 제외) */
 .toolbar button:hover:not(:disabled) {
   border-color: #6366f1;
   color: #4338ca;
 }
 
+/* 활성 상태 버튼 */
 .toolbar button.active {
   background: #4f46e5;
   border-color: #4f46e5;
   color: #ffffff;
 }
 
+/* 비활성 버튼 */
 .toolbar button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
 }
 
+/* 툴바 아이콘 감싸는 래퍼 */
 .toolbar-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
+/* 아이콘 SVG 기본 크기 */
 .toolbar-icon svg {
   width: 18px;
   height: 18px;
   fill: currentColor;
 }
 
+/* 툴바 항목 구분선 */
 .toolbar-separator {
   width: 1px;
   height: 24px;
@@ -63,6 +72,7 @@
   margin: 0 0.25rem;
 }
 
+/* 색상 선택 라벨 */
 .toolbar-color {
   display: inline-flex;
   align-items: center;
@@ -72,6 +82,7 @@
   margin-left: 0.25rem;
 }
 
+/* 컬러 피커 크기/스타일 */
 .toolbar-color input[type='color'] {
   width: 32px;
   height: 28px;
@@ -81,16 +92,19 @@
   cursor: pointer;
 }
 
+/* 크롬 계열 컬러 스와치 */
 .toolbar-color input[type='color']::-webkit-color-swatch {
   border-radius: 6px;
   border: 1px solid #e2e8f0;
 }
 
+/* 파이어폭스 컬러 스와치 */
 .toolbar-color input[type='color']::-moz-color-swatch {
   border-radius: 6px;
   border: 1px solid #e2e8f0;
 }
 
+/* 폰트/크기 셀렉트 라벨 */
 .toolbar-select {
   display: inline-flex;
   align-items: center;
@@ -100,6 +114,7 @@
   margin-left: 0.25rem;
 }
 
+/* 셀렉트 박스 스타일 */
 .toolbar-select select {
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -109,10 +124,12 @@
   color: #111827;
 }
 
+/* 입력 영역 컨테이너 (placeholder 위치 기준) */
 .editor-container {
   position: relative;
 }
 
+/* 실제 입력 영역 */
 .editor-input {
   min-height: 260px;
   padding: 1.25rem;
@@ -122,6 +139,7 @@
   font-size: 1rem;
 }
 
+/* 입력 전 표시되는 안내 문구 */
 .editor-placeholder {
   position: absolute;
   top: 1.25rem;
@@ -130,26 +148,32 @@
   pointer-events: none;
 }
 
+/* 문단 간격 */
 .editor-paragraph {
   margin: 0 0 0.75rem;
 }
 
+/* 텍스트 굵게 */
 .editor-bold {
   font-weight: 700;
 }
 
+/* 이탤릭 */
 .editor-italic {
   font-style: italic;
 }
 
+/* 밑줄 */
 .editor-underline {
   text-decoration: underline;
 }
 
+/* 취소선 */
 .editor-strikethrough {
   text-decoration: line-through;
 }
 
+/* 인라인 코드 스타일 */
 .editor-code {
   font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;

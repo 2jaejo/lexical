@@ -24,8 +24,10 @@ import {
 } from '@lexical/list'
 
 export default function Toolbar() {
+  // Lexical 에디터 인스턴스 가져오기
   const [editor] = useLexicalComposerContext()
 
+  // 실행 가능 여부 및 현재 선택 상태를 저장
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
   const [isBold, setIsBold] = useState(false)
@@ -33,19 +35,26 @@ export default function Toolbar() {
   const [isUnderline, setIsUnderline] = useState(false)
   const [isStrikethrough, setIsStrikethrough] = useState(false)
   const [isCode, setIsCode] = useState(false)
+
+  // 선택된 텍스트의 스타일 값을 저장
   const [textColor, setTextColor] = useState('#111827')
   const [backgroundColor, setBackgroundColor] = useState('#ffffff')
   const [fontSize, setFontSize] = useState('16px')
   const [fontFamily, setFontFamily] = useState('Inter, system-ui, sans-serif')
 
+  // 현재 selection 상태를 읽어 툴바 버튼/입력값을 동기화
   const updateToolbar = useCallback(() => {
+    // 현재 선택(Selection) 가져오기
     const selection = $getSelection()
+    // RangeSelection일 때만 포맷/스타일 정보를 읽을 수 있음
     if ($isRangeSelection(selection)) {
+      // 텍스트 포맷 활성 상태 반영
       setIsBold(selection.hasFormat('bold'))
       setIsItalic(selection.hasFormat('italic'))
       setIsUnderline(selection.hasFormat('underline'))
       setIsStrikethrough(selection.hasFormat('strikethrough'))
       setIsCode(selection.hasFormat('code'))
+      // 인라인 스타일 값 반영 (없으면 기본값 사용)
       setTextColor(
         $getSelectionStyleValueForProperty(selection, 'color', '#111827'),
       )
@@ -69,13 +78,16 @@ export default function Toolbar() {
     }
   }, [])
 
+  // 에디터 업데이트 및 selection 변경을 구독
   useEffect(() => {
     return mergeRegister(
+      // 문서 상태가 변경될 때마다 툴바 동기화
       editor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
           updateToolbar()
         })
       }),
+      // 커서/선택 범위가 바뀌는 경우 즉시 반영
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
@@ -84,6 +96,7 @@ export default function Toolbar() {
         },
         COMMAND_PRIORITY_CRITICAL,
       ),
+      // 실행 취소 가능 여부 구독
       editor.registerCommand(
         CAN_UNDO_COMMAND,
         (payload) => {
@@ -92,6 +105,7 @@ export default function Toolbar() {
         },
         COMMAND_PRIORITY_CRITICAL,
       ),
+      // 다시 실행 가능 여부 구독
       editor.registerCommand(
         CAN_REDO_COMMAND,
         (payload) => {
@@ -103,13 +117,17 @@ export default function Toolbar() {
     )
   }, [editor, updateToolbar])
 
+  // 인라인 텍스트 포맷 토글
   const format = (type) => {
     editor.dispatchCommand(FORMAT_TEXT_COMMAND, type)
   }
 
+  // 글자색 적용
   const applyTextColor = (event) => {
+    // 컬러 입력값 반영
     const nextColor = event.target.value
     setTextColor(nextColor)
+    // 선택 범위에만 스타일 적용
     editor.update(() => {
       const selection = $getSelection()
       if ($isRangeSelection(selection)) {
@@ -118,9 +136,12 @@ export default function Toolbar() {
     })
   }
 
+  // 배경색 적용
   const applyBackgroundColor = (event) => {
+    // 컬러 입력값 반영
     const nextColor = event.target.value
     setBackgroundColor(nextColor)
+    // 선택 범위에만 스타일 적용
     editor.update(() => {
       const selection = $getSelection()
       if ($isRangeSelection(selection)) {
@@ -129,9 +150,12 @@ export default function Toolbar() {
     })
   }
 
+  // 글자 크기 적용
   const applyFontSize = (event) => {
+    // 선택된 글자 크기 반영
     const nextSize = event.target.value
     setFontSize(nextSize)
+    // 선택 범위에만 스타일 적용
     editor.update(() => {
       const selection = $getSelection()
       if ($isRangeSelection(selection)) {
@@ -140,9 +164,12 @@ export default function Toolbar() {
     })
   }
 
+  // 글자체 적용
   const applyFontFamily = (event) => {
+    // 선택된 글자체 반영
     const nextFamily = event.target.value
     setFontFamily(nextFamily)
+    // 선택 범위에만 스타일 적용
     editor.update(() => {
       const selection = $getSelection()
       if ($isRangeSelection(selection)) {
@@ -153,6 +180,7 @@ export default function Toolbar() {
 
   return (
     <div className="toolbar">
+      {/* 실행 취소/다시 실행 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(UNDO_COMMAND)}
@@ -161,6 +189,7 @@ export default function Toolbar() {
       >
         ⟲
       </button>
+      {/* 다시 실행 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(REDO_COMMAND)}
@@ -170,6 +199,7 @@ export default function Toolbar() {
         ⟳
       </button>
       <span className="toolbar-separator" />
+      {/* 인라인 텍스트 포맷 */}
       <button
         type="button"
         onClick={() => format('bold')}
@@ -179,6 +209,7 @@ export default function Toolbar() {
       >
         B
       </button>
+      {/* 이탤릭 */}
       <button
         type="button"
         onClick={() => format('italic')}
@@ -188,6 +219,7 @@ export default function Toolbar() {
       >
         I
       </button>
+      {/* 밑줄 */}
       <button
         type="button"
         onClick={() => format('underline')}
@@ -197,6 +229,7 @@ export default function Toolbar() {
       >
         U
       </button>
+      {/* 취소선 */}
       <button
         type="button"
         onClick={() => format('strikethrough')}
@@ -206,6 +239,7 @@ export default function Toolbar() {
       >
         S
       </button>
+      {/* 인라인 코드 */}
       <button
         type="button"
         onClick={() => format('code')}
@@ -216,6 +250,7 @@ export default function Toolbar() {
         {'</>'}
       </button>
       <span className="toolbar-separator" />
+      {/* 정렬 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left')}
@@ -230,6 +265,7 @@ export default function Toolbar() {
           </svg>
         </span>
       </button>
+      {/* 가운데 정렬 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center')}
@@ -244,6 +280,7 @@ export default function Toolbar() {
           </svg>
         </span>
       </button>
+      {/* 오른쪽 정렬 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right')}
@@ -258,6 +295,7 @@ export default function Toolbar() {
           </svg>
         </span>
       </button>
+      {/* 양쪽 정렬 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify')}
@@ -273,6 +311,7 @@ export default function Toolbar() {
         </span>
       </button>
       <span className="toolbar-separator" />
+      {/* 리스트 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND)}
@@ -280,6 +319,7 @@ export default function Toolbar() {
       >
         • List
       </button>
+      {/* 번호 매기기 리스트 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND)}
@@ -287,6 +327,7 @@ export default function Toolbar() {
       >
         1. List
       </button>
+      {/* 리스트 제거 */}
       <button
         type="button"
         onClick={() => editor.dispatchCommand(REMOVE_LIST_COMMAND)}
@@ -295,6 +336,7 @@ export default function Toolbar() {
         List ✕
       </button>
       <span className="toolbar-separator" />
+      {/* 폰트 설정 */}
       <label className="toolbar-select">
         글자크기
         <select value={fontSize} onChange={applyFontSize} aria-label="Font size">
@@ -308,6 +350,7 @@ export default function Toolbar() {
           <option value="32px">32px</option>
         </select>
       </label>
+      {/* 글자체 설정 */}
       <label className="toolbar-select">
         글자체
         <select
@@ -316,16 +359,13 @@ export default function Toolbar() {
           aria-label="Font family"
         >
           <option value="Inter, system-ui, sans-serif">Inter</option>
-          <option value="'Noto Sans KR', system-ui, sans-serif">
-            Noto Sans KR
-          </option>
-          <option value="'Pretendard', system-ui, sans-serif">
-            Pretendard
-          </option>
+          <option value="'Noto Sans KR', system-ui, sans-serif">Noto Sans KR</option>
+          <option value="'Pretendard', system-ui, sans-serif">Pretendard</option>
           <option value="'Times New Roman', serif">Times New Roman</option>
           <option value="'Courier New', monospace">Courier New</option>
         </select>
       </label>
+      {/* 색상 설정 */}
       <label className="toolbar-color">
         글자색
         <input
@@ -335,6 +375,7 @@ export default function Toolbar() {
           aria-label="Text color"
         />
       </label>
+      {/* 배경색 설정 */}
       <label className="toolbar-color">
         배경색
         <input
